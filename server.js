@@ -5,6 +5,9 @@ const app = express();
 const routes = require("./app/routes");
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocs = require("./swagger-output.json");
+const { graphqlHTTP } = require("express-graphql");
+const schema = require("./app/schema/test.schema");
+const root = require("./app/resolver/test.resolver");
 const PORT = process.env.PORT || 4500;
 const crosOptions = {
   origin: "http://localhost:3000",
@@ -19,6 +22,14 @@ app.get("/", (req, res) => {
 
 app.use("/api", routes);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+app.use(
+  "/graphql",
+  graphqlHTTP({
+    schema: schema,
+    rootValue: root,
+    graphiql: true,
+  })
+);
 
 db()
   .then((res) => {

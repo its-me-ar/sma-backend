@@ -1,6 +1,7 @@
 const User = require("../models/users.model");
 
 const register = async (_req, res) => {
+  // #swagger.tags = ['Register User']
   const { email, password } = _req.body;
   try {
     const isUser = await User.findOne({ email });
@@ -21,6 +22,7 @@ const register = async (_req, res) => {
 };
 
 const getAllUsers = async (_req, res) => {
+  // #swagger.tags = ['Get All Users']
   try {
     const users = await User.find({});
     res.status(200).json({ message: "User List", data: users });
@@ -34,5 +36,5 @@ const getAllUsers = async (_req, res) => {
 
 module.exports = {
   register,
-  getAllUsers
+  getAllUsers,
 };

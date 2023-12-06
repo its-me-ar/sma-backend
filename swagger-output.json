@@ -1,8 +1,8 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "My API",
-    "description": "Description",
+    "title": "SMA API's",
+    "description": "Backend Express APP",
     "version": "1.0.0"
   },
   "host": "localhost:4500/api",
@@ -13,6 +13,9 @@
   "paths": {
     "/users/": {
       "post": {
+        "tags": [
+          "Register User"
+        ],
         "description": "",
         "parameters": [
           {
@@ -44,6 +47,9 @@
         }
       },
       "get": {
+        "tags": [
+          "Get All Users"
+        ],
         "description": "",
         "responses": {
           "200": {

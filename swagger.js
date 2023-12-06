@@ -2,8 +2,8 @@ const swaggerAutogen = require('swagger-autogen')();
 
 const doc = {
   info: {
-    title: 'My API',
-    description: 'Description'
+    title: "SMA API's",
+    description: 'Backend Express APP'
   },
   host: 'localhost:4500/api'
 };
