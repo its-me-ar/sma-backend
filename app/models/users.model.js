@@ -1,15 +1,20 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
-const UserSchema = mongoose.Schema({
-  email: {
-    type: String,
-    require: true,
+const UserSchema = mongoose.Schema(
+  {
+    email: {
+      type: String,
+      require: true,
+    },
+    password: {
+      type: String,
+      require: true,
+    },
   },
-  password: {
-    type: String,
-    require: true,
-  },
-});
+  {
+    timestamps: true,
+  }
+);
 
 UserSchema.set("toJSON", {
   transform: function (doc, ret) {
