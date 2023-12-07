@@ -11,7 +11,7 @@ const root = require("./app/resolver/test.resolver");
 const bodyParser = require("body-parser");
 const PORT = process.env.PORT || 4500;
 const crosOptions = {
-  origin: "http://localhost:3000",
+  origin: "http://localhost:5173",
 };
 app.use(cors(crosOptions));
 app.use(bodyParser.json());

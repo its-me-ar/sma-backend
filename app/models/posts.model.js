@@ -10,11 +10,16 @@ const PostSchema = mongoose.Schema(
       type: String,
       require: true,
     },
-    tags: [{ type: String }],
     media: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Media",
+      },
+    ],
+    comments: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Comment",
       },
     ],
   },

@@ -10,6 +10,15 @@ const UserSchema = mongoose.Schema(
       type: String,
       require: true,
     },
+    name: {
+      type: String,
+    },
+    bio: {
+      type: String,
+    },
+    image:{
+      type:String
+    }
   },
   {
     timestamps: true,
@@ -31,6 +40,7 @@ UserSchema.pre("save", async function (next) {
     next(error);
   }
 });
+
 
 const User = mongoose.model("User", UserSchema);
 module.exports = User;
