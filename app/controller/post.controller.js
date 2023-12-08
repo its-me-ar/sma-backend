@@ -6,7 +6,7 @@ const uploadMedia = require("../libs/uploadMedia");
 const createPost = async (_req, res) => {
   // #swagger.tags = ['Create Post']
   try {
-    const { user, body, fileBuffer } = _req;
+    const { user, body, fileBuffer,mediaType } = _req;
     const { data } = body;
     await addTags(data);
 
@@ -20,7 +20,8 @@ const createPost = async (_req, res) => {
         _req.fileBuffer,
         post?._id,
         "post",
-        "feeds"
+        "feeds",
+        mediaType
       );
       const media = await Media.create({
         post_id: post?._id,
@@ -38,6 +39,8 @@ const createPost = async (_req, res) => {
     });
   }
 };
+
+
 
 const addTags = async (data) => {
   let _tags;

@@ -16,9 +16,21 @@ const UserSchema = mongoose.Schema(
     bio: {
       type: String,
     },
-    image:{
-      type:String
-    }
+    image: {
+      type: String,
+    },
+    friendsList: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    requestList: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
   },
   {
     timestamps: true,
@@ -40,7 +52,6 @@ UserSchema.pre("save", async function (next) {
     next(error);
   }
 });
-
 
 const User = mongoose.model("User", UserSchema);
 module.exports = User;
