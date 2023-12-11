@@ -4,9 +4,6 @@
   "main": "index.js",
   "author": "Ashish Ranjan",
   "license": "MIT",
-  "engines": {
-    "node": "20.x"
-  },
   "scripts": {
     "dev": "concurrently  \"yarn swagger\" \"nodemon server.js\"",
     "start": "node index.js",
