@@ -6,8 +6,7 @@ const routes = require("./app/routes");
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocs = require("./swagger-output.json");
 const { graphqlHTTP } = require("express-graphql");
-const schema = require("./app/schema/test.schema");
-const root = require("./app/resolver/test.resolver");
+const schema = require("./app/schema/user.schema");
 const bodyParser = require("body-parser");
 const dotenv = require("dotenv");
 dotenv.config();
@@ -29,7 +28,6 @@ app.use(
   "/graphql",
   graphqlHTTP({
     schema: schema,
-    rootValue: root,
     graphiql: true,
   })
 );
