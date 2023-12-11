@@ -43,7 +43,7 @@ const createPost = async (_req, res) => {
 
 
 const addTags = async (data) => {
-  let _tags;
+  let _tags=[];
   if (data) {
     _tags = data.match(/#(\w+)/g) || [];
   }
