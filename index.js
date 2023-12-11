@@ -14,7 +14,7 @@ dotenv.config();
 
 const PORT = process.env.PORT || 4500;
 const crosOptions = {
-  origin: process.env.CROS_WEBSITE
+  origin: "*"
 };
 app.use(cors(crosOptions));
 app.use(bodyParser.json());
