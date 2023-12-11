@@ -27,7 +27,7 @@ app.use("/api", routes);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 app.use(
   "/api/graphql",
-  // authMiddleware,
+  authMiddleware,
   graphqlHTTP({
     schema: schema,
     graphiql: true,
