@@ -123,15 +123,20 @@ const getPostByID = async (_req, res) => {
   try {
     if (params?.id) {
       const posts = await Post.findById(params?.id)
-        .populate("userId")
-        .populate("media")
-        .populate({
-          path: "comments",
-          populate: {
-            path: "userId",
-            model: "User",
-          },
-        })
+      .populate({
+        path:"userId",
+        select:"image name",
+
+      })
+      .populate("media")
+      .populate({
+        path: "comments",
+        populate: {
+          path: "userId",
+          model: "User",
+          select:"image name",
+        },
+      })
         .sort({ createdAt: -1 })
         .exec();
       return res.json({
