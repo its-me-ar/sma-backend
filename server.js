@@ -40,3 +40,5 @@ db()
   .catch((error) => {
     console.log("Error is connecting in DB" + error);
   });
+
+  module.exports =app
