@@ -5,7 +5,7 @@
   "author": "Ashish Ranjan",
   "license": "MIT",
   "engines": {
-    "node": "20.x"
+    "node": "18.x"
   },
   "scripts": {
     "dev": "concurrently  \"yarn swagger\" \"nodemon server.js\"",
