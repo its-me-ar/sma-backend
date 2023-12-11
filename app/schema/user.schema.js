@@ -43,7 +43,12 @@ const PostType = new GraphQLObjectType({
   name: "Post",
   fields: () => ({
     _id: { type: GraphQLID },
-    userId: { type: GraphQLID },
+    userId: {
+      type: UserType,
+      resolve(parent, args) {
+        return UserModel.findById(parent.userId);
+      },
+    },
     data: { type: GraphQLString },
     media: { type: new GraphQLList(MediaType) },
     comments: {

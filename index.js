@@ -9,6 +9,7 @@ const { graphqlHTTP } = require("express-graphql");
 const schema = require("./app/schema/user.schema");
 const bodyParser = require("body-parser");
 const dotenv = require("dotenv");
+const authMiddleware = require("./app/middleware/auth.middleware");
 dotenv.config();
 
 const PORT = process.env.PORT || 4500;
@@ -25,7 +26,8 @@ app.get("/", (req, res) => {4
 app.use("/api", routes);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 app.use(
-  "/graphql",
+  "/api/graphql",
+  // authMiddleware,
   graphqlHTTP({
     schema: schema,
     graphiql: true,
