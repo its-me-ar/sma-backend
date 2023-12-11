@@ -9,15 +9,18 @@ const { graphqlHTTP } = require("express-graphql");
 const schema = require("./app/schema/test.schema");
 const root = require("./app/resolver/test.resolver");
 const bodyParser = require("body-parser");
+const dotenv = require("dotenv");
+dotenv.config();
+
 const PORT = process.env.PORT || 4500;
 const crosOptions = {
-  origin: "http://localhost:5173",
+  origin: process.env.CROS_WEBSITE
 };
 app.use(cors(crosOptions));
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.get("/", (req, res) => {
+app.get("/", (req, res) => {4
   res.send("<h1>SMA API Version 1.0</h1>");
 });
 app.use("/api", routes);
