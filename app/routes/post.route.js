@@ -7,6 +7,7 @@ const {
   addCommnet,
   getPostByID,
   getPostsByTag,
+  getDiscover,
 } = require("../controller/post.controller");
 const handleFileUpload = require("../middleware/uploadMiddleware");
 
@@ -16,6 +17,7 @@ router.post("/", authMiddleware, handleFileUpload, createPost);
 router.get("/", authMiddleware, getAllPost);
 router.get("/:id", getPostByID);
 router.get("/feeds/:tag", authMiddleware, getPostsByTag);
+router.get("/discover", getDiscover);
 router.post("/comment", authMiddleware, addCommnet);
 
 module.exports = router;

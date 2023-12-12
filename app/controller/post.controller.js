@@ -2,6 +2,7 @@ const Post = require("../models/posts.model");
 const Media = require("../models/media.model");
 const Tag = require("../models/tags.model");
 const Comment = require("../models/comment.model");
+const User = require("../models/users.model");
 const uploadMedia = require("../libs/uploadMedia");
 const createPost = async (_req, res) => {
   // #swagger.tags = ['Create Post']
@@ -185,10 +186,50 @@ const getPostsByTag = async (req, res) => {
   }
 };
 
+const getDiscover = async (req, res) => {
+  try {
+    const { search } = req.query;
+    if (!search) {
+      return res.status(400).json({ error: "Search data is required." });
+    }
+
+    const posts = await Post.find({
+      data: { $regex: new RegExp(search, "i") },
+    })
+      .populate("userId")
+      .populate("media")
+      .populate({
+        path: "comments",
+        populate: {
+          path: "userId",
+          model: "User",
+          select: "image name",
+        },
+      })
+      .sort({ createdAt: -1 })
+      .exec();
+
+    const users = await User.find({
+      name: { $regex: new RegExp(search, "i") },
+    });
+
+    res.json({
+      posts,
+      users,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      error: "Internal Server Error",
+    });
+  }
+};
+
 module.exports = {
   createPost,
   getAllPost,
   addCommnet,
   getPostByID,
   getPostsByTag,
+  getDiscover
 };
