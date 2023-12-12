@@ -6,7 +6,7 @@ const uploadMedia = require("../libs/uploadMedia");
 const createPost = async (_req, res) => {
   // #swagger.tags = ['Create Post']
   try {
-    const { user, body, fileBuffer,mediaType } = _req;
+    const { user, body, fileBuffer, mediaType } = _req;
     const { data } = body;
     await addTags(data);
 
@@ -40,10 +40,8 @@ const createPost = async (_req, res) => {
   }
 };
 
-
-
 const addTags = async (data) => {
-  let _tags=[];
+  let _tags = [];
   if (data) {
     _tags = data.match(/#(\w+)/g) || [];
   }
@@ -123,20 +121,19 @@ const getPostByID = async (_req, res) => {
   try {
     if (params?.id) {
       const posts = await Post.findById(params?.id)
-      .populate({
-        path:"userId",
-        select:"image name",
-
-      })
-      .populate("media")
-      .populate({
-        path: "comments",
-        populate: {
+        .populate({
           path: "userId",
-          model: "User",
-          select:"image name",
-        },
-      })
+          select: "image name",
+        })
+        .populate("media")
+        .populate({
+          path: "comments",
+          populate: {
+            path: "userId",
+            model: "User",
+            select: "image name",
+          },
+        })
         .sort({ createdAt: -1 })
         .exec();
       return res.json({
@@ -153,9 +150,45 @@ const getPostByID = async (_req, res) => {
     });
   }
 };
+
+const getPostsByTag = async (req, res) => {
+  try {
+    const { params } = req;
+    if (!params?.tag) {
+      return res.status(400).json({ error: "Tag data is required." });
+    }
+
+    const posts = await Post.find({
+      data: { $regex: new RegExp(params?.tag, "i") },
+    })
+      .populate("userId")
+      .populate("media")
+      .populate({
+        path: "comments",
+        populate: {
+          path: "userId",
+          model: "User",
+          select: "image name",
+        },
+      })
+      .sort({ createdAt: -1 })
+      .exec();
+
+    res.json({
+      posts,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      error: "Internal Server Error",
+    });
+  }
+};
+
 module.exports = {
   createPost,
   getAllPost,
   addCommnet,
   getPostByID,
+  getPostsByTag,
 };
