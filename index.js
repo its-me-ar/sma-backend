@@ -49,11 +49,6 @@ io.on("connection", (socket) => {
   });
 });
 
-// Include Socket.io instance in routes
-app.use((req, res, next) => {
-  req.io = io;
-  next();
-});
 
 app.use("/api", routes);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
