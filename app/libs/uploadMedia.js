@@ -11,7 +11,6 @@ async function uploadMedia(buffer, fileName, type, folder, mediaType) {
       },
       (err, result) => {
         if (err) {
-          console.log(err, ">>>");
           return rej(err);
         }
         res(result);

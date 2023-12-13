@@ -34,7 +34,6 @@ const createPost = async (_req, res) => {
     }
     res.status(201).json({ message: "Post Created" });
   } catch (error) {
-    console.log(error);
     res.status(500).json({
       error: "Internal Server Error",
     });
@@ -79,7 +78,6 @@ const getAllPost = async (_req, res) => {
       posts,
     });
   } catch (error) {
-    console.log(error);
     res.status(500).json({
       error: "Internal Server Error",
     });
@@ -109,7 +107,6 @@ const addCommnet = async (_req, res) => {
     );
     res.status(201).json({ message: "Comment added" });
   } catch (error) {
-    console.log(error);
     res.status(500).json({
       error: "Internal Server Error",
     });
@@ -145,7 +142,6 @@ const getPostByID = async (_req, res) => {
       posts: [],
     });
   } catch (error) {
-    console.log(error);
     res.status(500).json({
       error: "Internal Server Error",
     });

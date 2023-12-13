@@ -1,8 +1,11 @@
 const User = require("../models/users.model");
+const Notification = require("../models/notifications.model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 const uploadMedia = require("../libs/uploadMedia");
+const { Socket } = require("socket.io");
+const SocketManager = require("../libs/SocketManager");
 
 dotenv.config();
 
@@ -20,7 +23,6 @@ const register = async (_req, res) => {
     await user.save();
     res.status(201).json({ message: "Registration Successful" });
   } catch (error) {
-    console.log(error);
     res.status(500).json({
       error: "Internal Server Error",
     });
@@ -33,7 +35,6 @@ const getAllUsers = async (_req, res) => {
     const users = await User.find({});
     res.status(200).json({ message: "User List", data: users });
   } catch (error) {
-    console.log(error);
     res.status(500).json({
       error: "Internal Server Error",
     });
@@ -65,7 +66,6 @@ const login = async (_req, res) => {
     );
     res.json({ token, user });
   } catch (error) {
-    console.log(error);
     res.status(500).json({
       error: "Internal Server Error",
     });
@@ -118,7 +118,6 @@ const updateProfile = async (_req, res) => {
 
     return res.status(404).json({ message: "No fields to update" });
   } catch (error) {
-    console.log(error);
     res.status(500).json({
       error: "Internal Server Error",
     });
@@ -134,7 +133,6 @@ const getUserByID = async (_req, res) => {
       .populate("requestList");
     res.status(200).json({ message: "User List", data: users });
   } catch (error) {
-    console.log(error);
     res.status(500).json({
       error: "Internal Server Error",
     });
@@ -174,6 +172,7 @@ const sendFriendRequest = async (req, res) => {
   const friendId = req.body.friendId;
 
   try {
+    const currentUser = await User.findById(userId);
     const user = await User.findById(friendId);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -181,7 +180,16 @@ const sendFriendRequest = async (req, res) => {
     if (!user.requestList.includes(userId)) {
       user.requestList.push(userId);
       await user.save();
-
+      const message = `You have a new friend request from ${
+        currentUser.name ? currentUser?.name : currentUser?.email
+      }`;
+      const notification = new Notification({
+        receiverId: friendId,
+        senderId: userId,
+        message,
+      });
+      await notification.save();
+      SocketManager.sendNotification(friendId, "friendRequest", { message });
       res.json({ message: "Friend request sent successfully" });
     } else {
       res.status(400).json({ message: "Friend request already sent" });
@@ -211,6 +219,17 @@ const actionOnfriendRequest = async (req, res) => {
         user.friendsList.push(userId);
         await user.save();
         await currentUser.save();
+
+        const message = `${
+          currentUser.name ? currentUser?.name : currentUser?.email
+        } is accepted your  friend request.`;
+        const notification = new Notification({
+          receiverId: friendId,
+          senderId: userId,
+          message,
+        });
+        await notification.save();
+        SocketManager.sendNotification(friendId, "friendRequest", { message });
         res.json({ message: "Friend request accepted" });
       } else {
         res.status(400).json({ message: "Already have friends" });
